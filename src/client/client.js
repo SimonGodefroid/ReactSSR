@@ -8,11 +8,12 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 // import Home from './components/Home';
 import { renderRoutes } from 'react-router-config';
+
 import Routes from './Routes';
 // rehydrate is the fact of injecting new js code on the client (it's the same as render)
 import reducers from './reducers';
 
-const store = createStore(reducers, {}, applyMiddleware(thunk));
+const store = createStore(reducers, window.INITIAL_STATE, applyMiddleware(thunk));
 ReactDOM.hydrate(
 	<Provider store={store}>
 		<BrowserRouter>

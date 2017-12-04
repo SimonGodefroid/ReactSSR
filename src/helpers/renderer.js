@@ -4,6 +4,7 @@ import { StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 // produces the routes as we know them
 import { renderRoutes } from 'react-router-config';
+import serialize from 'serialize-javascript';
 import Routes from '../client/Routes';
 
 // context handles redirects
@@ -21,6 +22,7 @@ export default (req, store) => {
 			</head>
 			<body>
 				<div id="root">${content}</div>
+				<script>window.INITIAL_STATE=${serialize(store.getState())}</script>
 				<script src="bundle.js"></script>
 			</body>
 		</html>

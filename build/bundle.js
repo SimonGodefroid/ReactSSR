@@ -92,11 +92,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _HomePage = __webpack_require__(19);
+var _HomePage = __webpack_require__(9);
 
 var _HomePage2 = _interopRequireDefault(_HomePage);
 
-var _UsersListPage = __webpack_require__(20);
+var _UsersListPage = __webpack_require__(10);
 
 var _UsersListPage2 = _interopRequireDefault(_UsersListPage);
 
@@ -191,6 +191,10 @@ var _express2 = _interopRequireDefault(_express);
 
 var _reactRouterConfig = __webpack_require__(1);
 
+var _expressHttpProxy = __webpack_require__(20);
+
+var _expressHttpProxy2 = _interopRequireDefault(_expressHttpProxy);
+
 var _Routes = __webpack_require__(2);
 
 var _Routes2 = _interopRequireDefault(_Routes);
@@ -206,6 +210,14 @@ var _createStore2 = _interopRequireDefault(_createStore);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
+
+app.use('/api', (0, _expressHttpProxy2.default)('http://react-ssr-api.herokuapp/com', {
+	// for this app only
+	proxyReqOptDecorator: function proxyReqOptDecorator(opts) {
+		opts.header['x-forwarded-host'] = 'localhost:3000';
+		return opts;
+	}
+}));
 app.use(_express2.default.static('public'));
 app.get('*', function (req, res) {
 	var store = (0, _createStore2.default)();
@@ -236,8 +248,130 @@ module.exports = require("babel-polyfill");
 module.exports = require("express");
 
 /***/ }),
-/* 9 */,
-/* 10 */,
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Home = function Home() {
+	return _react2.default.createElement(
+		'div',
+		null,
+		_react2.default.createElement(
+			'div',
+			null,
+			'I\'m the very very best home component'
+		),
+		_react2.default.createElement(
+			'button',
+			{ onClick: function onClick() {
+					return console.log('hi there!');
+				} },
+			'Press Me !'
+		)
+	);
+};
+
+exports.default = { component: Home };
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(3);
+
+var _actions = __webpack_require__(4);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UsersList = function (_Component) {
+	_inherits(UsersList, _Component);
+
+	function UsersList() {
+		_classCallCheck(this, UsersList);
+
+		return _possibleConstructorReturn(this, (UsersList.__proto__ || Object.getPrototypeOf(UsersList)).apply(this, arguments));
+	}
+
+	_createClass(UsersList, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this.props.fetchUsers();
+		}
+	}, {
+		key: 'renderUsers',
+		value: function renderUsers() {
+			return this.props.users.map(function (user) {
+				return _react2.default.createElement(
+					'li',
+					{ key: user.id },
+					user.name
+				);
+			});
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(
+				'div',
+				null,
+				'Here\'s a big list of users:',
+				_react2.default.createElement(
+					'ul',
+					null,
+					this.renderUsers()
+				)
+			);
+		}
+	}]);
+
+	return UsersList;
+}(_react.Component);
+
+function mapStateToProps(state) {
+	return {
+		users: state.users
+	};
+}
+function loadData(store) {
+	return store.dispatch((0, _actions.fetchUsers)());
+}
+exports.default = {
+	loadData: loadData,
+	component: (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList)
+};
+
+/***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
@@ -266,6 +400,10 @@ var _reactRedux = __webpack_require__(3);
 
 var _reactRouterConfig = __webpack_require__(1);
 
+var _serializeJavascript = __webpack_require__(19);
+
+var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
+
 var _Routes = __webpack_require__(2);
 
 var _Routes2 = _interopRequireDefault(_Routes);
@@ -273,8 +411,6 @@ var _Routes2 = _interopRequireDefault(_Routes);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // context handles redirects
-
-// produces the routes as we know them
 exports.default = function (req, store) {
 	var content = (0, _server.renderToString)(_react2.default.createElement(
 		_reactRedux.Provider,
@@ -289,8 +425,9 @@ exports.default = function (req, store) {
 			)
 		)
 	));
-	return '\n\t\t<html>\n\t\t\t<head>\n\t\t\t</head>\n\t\t\t<body>\n\t\t\t\t<div id="root">' + content + '</div>\n\t\t\t\t<script src="bundle.js"></script>\n\t\t\t</body>\n\t\t</html>\n\t';
+	return '\n\t\t<html>\n\t\t\t<head>\n\t\t\t</head>\n\t\t\t<body>\n\t\t\t\t<div id="root">' + content + '</div>\n\t\t\t\t<script>window.INITIAL_STATE=' + (0, _serializeJavascript2.default)(store.getState()) + '</script>\n\t\t\t\t<script src="bundle.js"></script>\n\t\t\t</body>\n\t\t</html>\n\t';
 };
+// produces the routes as we know them
 
 /***/ }),
 /* 13 */
@@ -389,127 +526,15 @@ exports.default = function () {
 
 /***/ }),
 /* 19 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Home = function Home() {
-	return _react2.default.createElement(
-		'div',
-		null,
-		_react2.default.createElement(
-			'div',
-			null,
-			'I\'m the very very best home component'
-		),
-		_react2.default.createElement(
-			'button',
-			{ onClick: function onClick() {
-					return console.log('hi there!');
-				} },
-			'Press Me !'
-		)
-	);
-};
-
-exports.default = { component: Home };
+module.exports = require("serialize-javascript");
 
 /***/ }),
 /* 20 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = __webpack_require__(3);
-
-var _actions = __webpack_require__(4);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var UsersList = function (_Component) {
-	_inherits(UsersList, _Component);
-
-	function UsersList() {
-		_classCallCheck(this, UsersList);
-
-		return _possibleConstructorReturn(this, (UsersList.__proto__ || Object.getPrototypeOf(UsersList)).apply(this, arguments));
-	}
-
-	_createClass(UsersList, [{
-		key: 'componentDidMount',
-		value: function componentDidMount() {
-			this.props.fetchUsers();
-		}
-	}, {
-		key: 'renderUsers',
-		value: function renderUsers() {
-			return this.props.users.map(function (user) {
-				return _react2.default.createElement(
-					'li',
-					{ key: user.id },
-					user.name
-				);
-			});
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			return _react2.default.createElement(
-				'div',
-				null,
-				'Here\'s a big list of users:',
-				_react2.default.createElement(
-					'ul',
-					null,
-					this.renderUsers()
-				)
-			);
-		}
-	}]);
-
-	return UsersList;
-}(_react.Component);
-
-function mapStateToProps(state) {
-	return {
-		users: state.users
-	};
-}
-function loadData(store) {
-	return store.dispatch((0, _actions.fetchUsers)());
-}
-exports.default = {
-	loadData: loadData,
-	component: (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList)
-};
+module.exports = require("express-http-proxy");
 
 /***/ })
 /******/ ]);
