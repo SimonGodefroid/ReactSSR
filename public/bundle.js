@@ -8255,6 +8255,40 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
 	}();
 };
 
+var FETCH_CURRENT_USER = exports.FETCH_CURRENT_USER = 'fetch_current_user';
+var fetchCurrentUser = exports.fetchCurrentUser = function fetchCurrentUser() {
+	return function () {
+		var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(dispatch, getState, api) {
+			var res;
+			return regeneratorRuntime.wrap(function _callee2$(_context2) {
+				while (1) {
+					switch (_context2.prev = _context2.next) {
+						case 0:
+							_context2.next = 2;
+							return api.get('/current_user');
+
+						case 2:
+							res = _context2.sent;
+
+							dispatch({
+								type: FETCH_CURRENT_USER,
+								payload: res
+							});
+
+						case 4:
+						case 'end':
+							return _context2.stop();
+					}
+				}
+			}, _callee2, undefined);
+		}));
+
+		return function (_x4, _x5, _x6) {
+			return _ref2.apply(this, arguments);
+		};
+	}();
+};
+
 /***/ }),
 /* 183 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -39095,10 +39129,15 @@ var _usersReducer = __webpack_require__(480);
 
 var _usersReducer2 = _interopRequireDefault(_usersReducer);
 
+var _authReducer = __webpack_require__(481);
+
+var _authReducer2 = _interopRequireDefault(_authReducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
-	users: _usersReducer2.default
+	users: _usersReducer2.default,
+	auth: _authReducer2.default
 });
 
 /***/ }),
@@ -39125,6 +39164,31 @@ exports.default = function () {
 			return state;
 	}
 };
+
+/***/ }),
+/* 481 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+exports.default = function () {
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	var action = arguments[1];
+
+	switch (action.type) {
+		case _actions.FETCH_CURRENT_USER:
+			return action.payload.data || false;
+		default:
+			return state;
+	}
+};
+
+var _actions = __webpack_require__(182);
 
 /***/ })
 /******/ ]);
