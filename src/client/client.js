@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 // import Home from './components/Home';
 import Routes from './Routes';
 // rehydrate is the fact of injecting new js code on the client (it's the same as render)
+import reducers from './reducers';
 
 const store = createStore(reducers, {}, applyMiddleware(thunk));
 ReactDOM.hydrate(
