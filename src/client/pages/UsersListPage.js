@@ -12,7 +12,7 @@ class UsersList extends Component {
 	head() {
 		return (
 			<Helmet>
-				<title>Users App</title>
+				<title>{`${this.props.users.length.toString()} Users Loaded`} </title>
 				<meta property="og:title" content="Users App" />
 			</Helmet>
 		);
