@@ -540,6 +540,8 @@ var _reactRedux = __webpack_require__(2);
 
 var _actions = __webpack_require__(1);
 
+var _reactHelmet = __webpack_require__(28);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -574,11 +576,26 @@ var UsersList = function (_Component) {
 			});
 		}
 	}, {
+		key: 'head',
+		value: function head() {
+			return _react2.default.createElement(
+				_reactHelmet.Helmet,
+				null,
+				_react2.default.createElement(
+					'title',
+					null,
+					'Users App'
+				),
+				_react2.default.createElement('meta', { property: 'og:title', content: 'Users App' })
+			);
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return _react2.default.createElement(
 				'div',
 				null,
+				this.head(),
 				'Here\'s a big list of users:',
 				_react2.default.createElement(
 					'ul',
@@ -831,9 +848,13 @@ var _Routes = __webpack_require__(5);
 
 var _Routes2 = _interopRequireDefault(_Routes);
 
+var _reactHelmet = __webpack_require__(28);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // context handles redirects
+
+// produces the routes as we know them
 exports.default = function (req, store, context) {
 	var content = (0, _server.renderToString)(_react2.default.createElement(
 		_reactRedux.Provider,
@@ -848,9 +869,10 @@ exports.default = function (req, store, context) {
 			)
 		)
 	));
-	return '\n\t\t<html>\n\t\t\t<head>\n\t\t\t<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">\n\t\t\t</head>\n\t\t\t<body>\n\t\t\t\n\t\t\t\t<div id="root">' + content + '</div>\n\t\t\t\t<script>window.INITIAL_STATE=' + (0, _serializeJavascript2.default)(store.getState()) + '</script>\n\t\t\t\t<script src="bundle.js"></script>\n\t\t\t</body>\n\t\t</html>\n\t';
+
+	var helmet = _reactHelmet.Helmet.renderStatic();
+	return '\n\t\t<html>\n\t\t\t<head>\n\t\t\t' + helmet.title.toString() + '\n\t\t\t' + helmet.meta.toString() + '\n\t\t\t<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">\n\t\t\t</head>\n\t\t\t<body>\n\t\t\t\n\t\t\t\t<div id="root">' + content + '</div>\n\t\t\t\t<script>window.INITIAL_STATE=' + (0, _serializeJavascript2.default)(store.getState()) + '</script>\n\t\t\t\t<script src="bundle.js"></script>\n\t\t\t</body>\n\t\t</html>\n\t';
 };
-// produces the routes as we know them
 
 /***/ }),
 /* 19 */
@@ -1020,6 +1042,12 @@ exports.default = function () {
 			return state;
 	}
 };
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-helmet");
 
 /***/ })
 /******/ ]);
