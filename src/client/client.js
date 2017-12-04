@@ -8,12 +8,16 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 // import Home from './components/Home';
 import { renderRoutes } from 'react-router-config';
-
+import axios from 'axios';
 import Routes from './Routes';
 // rehydrate is the fact of injecting new js code on the client (it's the same as render)
 import reducers from './reducers';
 
-const store = createStore(reducers, window.INITIAL_STATE, applyMiddleware(thunk));
+const axiosInstance = axios.create({
+	baseURL: '/api'
+});
+
+const store = createStore(reducers, window.INITIAL_STATE, applyMiddleware(thunk.withExtraArgument(axiosInstance)));
 ReactDOM.hydrate(
 	<Provider store={store}>
 		<BrowserRouter>
